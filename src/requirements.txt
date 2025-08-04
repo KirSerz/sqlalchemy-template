@@ -1,0 +1,10 @@
+fastapi
+asyncpg
+uvicorn[standard]
+sqlalchemy
+psycopg2-binary
+pydantic_settings
+alembic
+itsdangerous
+sqladmin
+bcrypt

@@ -1,0 +1,25 @@
+services:
+  postgres:
+    image: postgres:17.5-alpine
+    container_name: postgres
+    command:
+      - "postgres"
+      - "-c"
+      - "max_connections=1000"
+      - "-c"
+      - "statement_timeout=${DB_STATEMENT_TIMEOUT:-300s}"
+      - "-c"
+      - "idle_in_transaction_session_timeout=${DB_IDLE_IN_TRANSACTION_SESSION_TIMEOUT:-300s}"
+    volumes:
+      - postgresql-data:/var/lib/postgresql/data
+    restart: on-failure
+    env_file:
+      - src/.env
+    ports:
+      - "127.0.0.1:5432:5432"
+
+
+volumes:
+  postgresql-data:
+
+

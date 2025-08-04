@@ -1,0 +1,46 @@
+services:
+  nginx:
+    command: nginx -g "daemon off;"
+    depends_on:
+      - api
+    image: nginx:alpine
+    restart: on-failure
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "127.0.0.1:8000:8000"
+
+  postgres:
+    image: postgres:17.5-alpine
+    container_name: postgres
+    command:
+      - "postgres"
+      - "-c"
+      - "max_connections=1000"
+      - "-c"
+      - "statement_timeout=${DB_STATEMENT_TIMEOUT:-300s}"
+      - "-c"
+      - "idle_in_transaction_session_timeout=${DB_IDLE_IN_TRANSACTION_SESSION_TIMEOUT:-300s}"
+    volumes:
+      - postgresql-data:/var/lib/postgresql/data
+    restart: on-failure
+    env_file:
+      - src/.env
+
+  api:
+    build:
+      context: src
+      dockerfile: ./Dockerfile
+    restart: on-failure
+    command: bash -c "alembic upgrade head; uvicorn apps.main:app --host 0.0.0.0 --port 8000 --reload"
+    depends_on:
+      - postgres
+    volumes:
+      - ./src/:/app/
+    env_file:
+      - src/.env
+
+volumes:
+  postgresql-data:
+
+
