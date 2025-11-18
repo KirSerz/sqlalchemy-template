@@ -44,10 +44,10 @@ Run migrations to setup database schema:
 `uvicorn apps.main:app --reload`
 
 ### set PYTHONPATH for run app scripts
-`
-(.venv) ...\sqlalchemy-template> cd .\src\
-(.venv) ...\sqlalchemy-template> $env:PYTHONPATH = "."
-`
+`(.venv) ...\sqlalchemy-template> cd .\src\`
+
+`(.venv) ...\sqlalchemy-template> $env:PYTHONPATH = "."`
+
 
 ### Create superuser
 
